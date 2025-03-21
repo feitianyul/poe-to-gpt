@@ -11,6 +11,7 @@ import json
 from httpx import AsyncClient
 from fastapi import FastAPI, HTTPException, Depends, APIRouter
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware  # 添加这行
 from fastapi.responses import StreamingResponse
 from fastapi_poe.types import ProtocolMessage
 from fastapi_poe.client import get_bot_response, get_final_response, QueryRequest, BotError
@@ -19,6 +20,16 @@ from fastapi_poe.client import get_bot_response, get_final_response, QueryReques
 load_dotenv()
 
 app = FastAPI()
+
+# 添加 CORS 中间件配置
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 在生产环境中应该设置具体的域名
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 security = HTTPBearer()
 router = APIRouter()
 
